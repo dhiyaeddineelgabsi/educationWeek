@@ -67,6 +67,7 @@ input {
   --shadow-card:         2px 3px 12px rgba(0, 100, 0, 0.10);
   --shadow-bubble:       1px 2px 6px rgba(0, 0, 0, 0.07);
   --shadow-user-bubble:  1px 2px 6px rgba(0, 100, 0, 0.10);
+  --safe-bottom:         env(safe-area-inset-bottom, 0px);
 }
 
 #app {
@@ -83,10 +84,13 @@ input {
   gap: 8px;
   flex: 1;
   min-height: 0;
+  position: relative;
 }
 
-@media (max-width: 600px) {
-  #sidebar { display: none; }
+#mobile-settings-btn,
+#mobile-close-sidebar,
+#mobile-overlay {
+  display: none;
 }
 
 @media (max-width: 400px) {
@@ -105,6 +109,17 @@ input {
   align-items: center;
   gap: 16px;
   box-shadow: var(--shadow-card);
+}
+
+#mobile-settings-btn {
+  margin-left: auto;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: #006400;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  min-height: 40px;
 }
 
 #header::after {
@@ -196,6 +211,27 @@ input {
   box-shadow: 0 4px 8px rgba(0, 100, 0, 0.18);
 }
 
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-head .sidebar-title {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+#mobile-close-sidebar {
+  border: 1px solid rgba(0, 100, 0, 0.35);
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: #006400;
+  font-size: 11px;
+  font-weight: 700;
+  background: #ffffff;
+}
+
 .suggestion {
   background: var(--color-card-bg);
   border: 1px solid var(--color-green-light);
@@ -235,6 +271,7 @@ input {
   gap: 10px;
   background: var(--color-card-bg);
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 #messages::-webkit-scrollbar       { width: 5px; }
@@ -258,12 +295,13 @@ input {
 .user-avatar { background: var(--color-green-light); }
 
 .bubble {
-  max-width: 68%;
+  max-width: 74%;
   padding: 9px 13px;
   border-radius: var(--radius-bubble);
   font-size: 12.5px;
   line-height: 1.6;
   color: var(--color-text-dark);
+  overflow-wrap: anywhere;
 }
 
 .bot-bubble {
@@ -307,26 +345,28 @@ input {
   padding: 10px 12px;
   border-top: 1px solid #c8e6d4;
   background: var(--color-white);
+  padding-bottom: calc(10px + var(--safe-bottom));
 }
 
 #msg-input {
   flex: 1;
   border: 1.5px solid var(--color-green-light);
   border-radius: 20px;
-  padding: 9px 14px;
+  padding: 11px 14px;
   font-size: 13px;
   outline: none;
   background: var(--color-card-bg);
   color: #222;
   transition: border-color 0.18s ease;
+  min-height: 44px;
 }
 
 #msg-input:focus       { border-color: var(--color-green-dark); }
 #msg-input::placeholder { color: #aaa; }
 
 #send-btn {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--color-green-dark);
   color: var(--color-white);
@@ -354,6 +394,134 @@ input {
 
 #footer strong {
   font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  #header {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  #header::after {
+    display: none;
+  }
+
+  #logo-block {
+    min-width: 110px;
+  }
+
+  #ieee-logo {
+    max-width: 120px;
+  }
+
+  #main-title {
+    font-size: 20px;
+  }
+
+  #sub-title,
+  #tagline {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  #app {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  #mobile-settings-btn,
+  #mobile-close-sidebar,
+  #mobile-overlay {
+    display: block;
+  }
+
+  #mobile-settings-btn {
+    flex-shrink: 0;
+  }
+
+  #sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: auto;
+    max-height: 78vh;
+    border-radius: 18px 18px 0 0;
+    border-bottom: none;
+    z-index: 30;
+    transform: translateY(102%);
+    transition: transform 0.28s ease;
+    padding-bottom: calc(14px + var(--safe-bottom));
+  }
+
+  #sidebar.mobile-open {
+    transform: translateY(0);
+  }
+
+  #mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.28);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+    z-index: 20;
+  }
+
+  #mobile-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #messages {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .avatar {
+    width: 26px;
+    height: 26px;
+  }
+
+  .bubble {
+    max-width: 84%;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  #msg-input {
+    font-size: 16px;
+  }
+
+  .ctrl-label {
+    font-size: 11px;
+  }
+
+  .ctrl-input,
+  .ctrl-textarea,
+  .ctrl-select,
+  .quiz-opt,
+  .quiz-submit-btn,
+  #mobile-close-sidebar {
+    min-height: 42px;
+    font-size: 13px;
+  }
+
+  .ctrl-textarea {
+    min-height: 86px;
+  }
+
+  .quiz-input-row {
+    flex-direction: column;
+  }
+
+  .quiz-input-row input,
+  .quiz-submit-btn {
+    width: 100%;
+    min-height: 44px;
+  }
 }
 
 

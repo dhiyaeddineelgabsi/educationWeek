@@ -27,6 +27,10 @@
         <h2 id="sub-title">Chatbot Éducatif Intelligent</h2>
         <p id="tagline">Pose-moi tes questions sur n'importe quel sujet scolaire</p>
       </div>
+
+      <button id="mobile-settings-btn" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Ouvrir les paramètres">
+        Paramètres
+      </button>
     </header>
 
     <!-- ═══ BODY ═══ -->
@@ -34,7 +38,10 @@
 
       <!-- Sidebar suggestions -->
       <aside id="sidebar">
-        <p class="sidebar-title">Paramètres d'apprentissage</p>
+        <div class="sidebar-head">
+          <p class="sidebar-title">Paramètres d'apprentissage</p>
+          <button id="mobile-close-sidebar" type="button" aria-label="Fermer les paramètres">Fermer</button>
+        </div>
 
         <div class="ctrl-group">
           <label for="ctrl-role" class="ctrl-label">Version</label>
@@ -97,6 +104,8 @@
           </div>
         </div>
       </aside>
+
+      <div id="mobile-overlay" aria-hidden="true"></div>
 
       <!-- Chat area -->
       <section id="chat-area">

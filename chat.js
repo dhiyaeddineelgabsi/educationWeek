@@ -43,6 +43,9 @@ const enrichRequestEl = document.getElementById('ctrl-enrich-request');
 const currentPlanEl = document.getElementById('ctrl-current-plan');
 const studentFieldsEl = document.getElementById('student-fields');
 const educatorFieldsEl = document.getElementById('educator-fields');
+const mobileSettingsBtnEl = document.getElementById('mobile-settings-btn');
+const mobileCloseSidebarEl = document.getElementById('mobile-close-sidebar');
+const mobileOverlayEl = document.getElementById('mobile-overlay');
 
 let conversationHistory = [];
 
@@ -208,6 +211,45 @@ function syncRoleUi() {
   const isEducator = roleEl.value === 'educator';
   studentFieldsEl.classList.toggle('hidden', isEducator);
   educatorFieldsEl.classList.toggle('hidden', !isEducator);
+}
+
+function openMobileSidebar() {
+  if (!mobileOverlayEl || !mobileSettingsBtnEl) return;
+  if (window.innerWidth > 768) return;
+
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+
+  sidebar.classList.add('mobile-open');
+  mobileOverlayEl.classList.add('active');
+  mobileSettingsBtnEl.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileSidebar() {
+  if (!mobileOverlayEl || !mobileSettingsBtnEl) return;
+
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+
+  sidebar.classList.remove('mobile-open');
+  mobileOverlayEl.classList.remove('active');
+  mobileSettingsBtnEl.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
+function setupMobileSidebar() {
+  if (!mobileSettingsBtnEl || !mobileCloseSidebarEl || !mobileOverlayEl) return;
+
+  mobileSettingsBtnEl.addEventListener('click', openMobileSidebar);
+  mobileCloseSidebarEl.addEventListener('click', closeMobileSidebar);
+  mobileOverlayEl.addEventListener('click', closeMobileSidebar);
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      closeMobileSidebar();
+    }
+  });
 }
 
 function extractBotText(payload) {
@@ -438,6 +480,7 @@ window.submitFreeAnswer = submitFreeAnswer;
 
 roleEl.addEventListener('change', syncRoleUi);
 syncRoleUi();
+setupMobileSidebar();
 
 inputEl.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
