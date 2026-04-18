@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistant Éducatif IEEE — Education Week 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ═══ HEADER ═══ -->
+    <header id="header">
+      <div id="logo-block">
+        <img
+          id="ieee-logo"
+          src="images/IEW Horizontal Color RGB.gif"
+          alt="IEEE Education Week"
+        />
+      </div>
+
+      <div id="header-text">
+        <h1 id="main-title">Assistant Éducatif IEEE</h1>
+        <h2 id="sub-title">Chatbot Éducatif Intelligent</h2>
+        <p id="tagline">Pose-moi tes questions sur n'importe quel sujet scolaire</p>
+      </div>
+    </header>
+
+    <!-- ═══ BODY ═══ -->
+    <div id="body">
+
+      <!-- Sidebar suggestions -->
+      <aside id="sidebar">
+        <p class="sidebar-title">Paramètres d'apprentissage</p>
+
+        <div class="ctrl-group">
+          <label for="ctrl-role" class="ctrl-label">Version</label>
+          <select id="ctrl-role" class="ctrl-select">
+            <option value="student" selected>Étudiant</option>
+            <option value="educator">Éducateur</option>
+          </select>
+        </div>
+
+        <div class="ctrl-group">
+          <label for="ctrl-topic" class="ctrl-label">Sujet</label>
+          <input id="ctrl-topic" class="ctrl-input" type="text" placeholder="Ex: Électricité, Algèbre..." />
+        </div>
+
+        <div class="ctrl-group">
+          <label for="ctrl-context" class="ctrl-label">Contexte curriculum</label>
+          <textarea id="ctrl-context" class="ctrl-textarea" rows="5" placeholder="Collez ici les passages du manuel (chapitre/page)"></textarea>
+        </div>
+
+        <div class="ctrl-group">
+          <label for="ctrl-lang" class="ctrl-label">Langue</label>
+          <select id="ctrl-lang" class="ctrl-select">
+            <option value="french" selected>Français</option>
+            <option value="arabic">Arabe</option>
+            <option value="darija">Darija</option>
+          </select>
+        </div>
+
+        <div id="student-fields">
+          <div class="ctrl-group">
+            <label for="ctrl-mode" class="ctrl-label">Mode étudiant</label>
+            <select id="ctrl-mode" class="ctrl-select">
+              <option value="direct" selected>Direct</option>
+              <option value="socratic">Socratique</option>
+              <option value="quiz">Quiz</option>
+              <option value="check">Correction</option>
+              <option value="curiosity">Curiosité</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="educator-fields" class="hidden">
+          <div class="ctrl-group">
+            <label for="ctrl-educator-mode" class="ctrl-label">Mode éducateur</label>
+            <select id="ctrl-educator-mode" class="ctrl-select">
+              <option value="query" selected>Query</option>
+              <option value="enrich">Enrich</option>
+              <option value="course_plan">Course Plan</option>
+            </select>
+          </div>
+
+          <div class="ctrl-group">
+            <label for="ctrl-enrich-request" class="ctrl-label">Enrich Request</label>
+            <textarea id="ctrl-enrich-request" class="ctrl-textarea" rows="3" placeholder="Ex: exemples STEM + exercices Bloom"></textarea>
+          </div>
+
+          <div class="ctrl-group">
+            <label for="ctrl-current-plan" class="ctrl-label">Current Plan</label>
+            <textarea id="ctrl-current-plan" class="ctrl-textarea" rows="4" placeholder="Plan de cours actuel (optionnel)"></textarea>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Chat area -->
+      <section id="chat-area">
+        <div id="messages" role="log" aria-live="polite" aria-label="Conversation">
+          <!-- Message de bienvenue -->
+          <div class="msg-row">
+            <div class="avatar bot-avatar" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                <rect x="3" y="6" width="14" height="10" rx="2.5" fill="white" opacity=".9"/>
+                <rect x="7" y="2" width="6" height="4" rx="1.5" fill="white" opacity=".7"/>
+                <circle cx="7.5" cy="11" r="1.5" fill="#0066A4"/>
+                <circle cx="12.5" cy="11" r="1.5" fill="#0066A4"/>
+                <line x1="10" y1="2" x2="10" y2="6" stroke="white" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <div class="bubble bot-bubble">
+              Bonjour ! 👋 Je suis <strong>Nour, ton assistant éducatif IEEE</strong>.<br>
+              Cette interface fonctionne avec deux versions: <strong>Étudiant</strong> et <strong>Éducateur</strong>.<br>
+              Ajoute d'abord le <strong>contexte curriculum</strong> (extraits du manuel), puis choisis le mode adapté pour obtenir des réponses alignées avec le système Smart Learning Companion.<br>
+              Tu peux maintenant tester Direct, Socratique, Quiz, Check, Curiosity, Query, Enrich et Course Plan.
+            </div>
+          </div>
+        </div>
+
+        <!-- Barre de saisie -->
+        <div id="input-bar">
+          <label for="msg-input" class="sr-only">Écrire un message</label>
+          <input
+            id="msg-input"
+            type="text"
+            placeholder="Écris ta question ici..."
+            autocomplete="off"
+            aria-label="Zone de saisie du message"
+          />
+          <button id="send-btn" onclick="sendMessage()" aria-label="Envoyer le message" title="Envoyer">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="white" aria-hidden="true">
+              <path d="M2 10L18 2L12 18L9.5 11.5L2 10Z"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+    </div><!-- /#body -->
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer id="footer">
+      Proposed by <strong>IEEE ENIT STUDENT BRANCH</strong> 
+    </footer>
+
+  </div><!-- /#app -->
+
+  <script src="chat.js"></script>
+</body>
+</html>
