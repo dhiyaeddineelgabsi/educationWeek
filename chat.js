@@ -328,12 +328,20 @@ async function callN8N(userText, mode) {
     payload = await response.text();
   }
 
-  if (typeof payload === 'string') return payload;
+  if (typeof payload === 'string') {
+    const text = payload.trim();
+    if (text) return text;
+    throw new Error('Webhook returned an empty text response');
+  }
 
   const extracted = extractBotText(payload);
-  if (extracted) return extracted;
+  if (extracted && extracted.trim()) return extracted.trim();
 
-  return JSON.stringify(payload);
+  const payloadKeys = payload && typeof payload === 'object'
+    ? Object.keys(payload).join(', ')
+    : 'none';
+
+  throw new Error(`Webhook JSON response has no readable text. Keys: ${payloadKeys}`);
 }
 
 function escapeJsSingleQuote(value) {
@@ -428,7 +436,7 @@ async function sendMessage() {
   } catch (error) {
     console.error('Erreur n8n:', error);
     removeTyping();
-    addMessage("Erreur: impossible de joindre le workflow n8n pour le moment. Verifie le webhook et reessaie.", false);
+    addMessage(`Erreur: aucune reponse exploitable du workflow n8n. Detail: ${error.message}`, false);
   } finally {
     setUiDisabled(false);
     inputEl.focus();
