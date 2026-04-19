@@ -323,7 +323,15 @@ async function callN8N(userText, mode) {
   let payload;
 
   if (contentType.includes('application/json')) {
-    payload = await response.json();
+    const text = await response.text();
+    if (!text || !text.trim()) {
+      throw new Error('Webhook returned empty response');
+    }
+    try {
+      payload = JSON.parse(text);
+    } catch (e) {
+      return text;
+    }
   } else {
     payload = await response.text();
   }
